@@ -20,6 +20,8 @@ import RemapModal from './components/RemapModal.jsx'
 import KitSelectModal from './components/KitSelectModal.jsx'
 import SamplingPackModal from './components/SamplingPackModal.jsx'
 import FeedbackModal from './components/FeedbackModal.jsx'
+import LoadingScreen from './components/LoadingScreen.jsx'
+import { preloadSamples, playSample, hasSample } from './engine/SampleEngine.js'
 
 const HIT_DURATION = 380
 const PEDAL_IDS = new Set(['kick_r','kick_l','hihat_pedal'])
@@ -35,10 +37,22 @@ export default function App() {
   })
   useEffect(()=>{localStorage.setItem('vd-km',JSON.stringify(keyMap))},[keyMap])
 
+  // Preload samples on mount
+  useEffect(()=>{
+    window.__sampleEngine = { playSample, hasSample }
+    preloadSamples((ratio, loaded, total) => {
+      setLoadingProgress(ratio)
+      setLoadedCount(loaded)
+      setTotalCount(total)
+      if (ratio >= 1) setLoadingDone(true)
+    }).then(()=>setLoadingDone(true)).catch(()=>setLoadingDone(true))
+  }, [])
+
   const [samplingPack, setSamplingPack] = useState(DEFAULT_SAMPLING_PACK)
   const [volume, setVolume]   = useState(80)
   const [reverb, setReverb]   = useState(38)
   const [dualStick, setDualStick] = useState(true)
+  const [velMode, setVelMode]     = useState('medium')
 
   const [hitDisplay, setHitDisplay]         = useState('')
   const [hitDisplayActive, setHitDA]        = useState(false)
@@ -54,6 +68,10 @@ export default function App() {
   const [showKit,      setShowKit]      = useState(false)
   const [showSampling, setShowSampling] = useState(false)
   const [showFeedback, setShowFeedback]   = useState(false)
+  const [loadingProgress, setLoadingProgress] = useState(0)
+  const [loadingDone, setLoadingDone]         = useState(false)
+  const [loadedCount, setLoadedCount]         = useState(0)
+  const [totalCount, setTotalCount]           = useState(0)
   const [showCustom,   setShowCustom]   = useState(false)
 
   const recorder = useRecorder()
@@ -191,7 +209,7 @@ export default function App() {
             <KitSVG preset={preset} activeItems={activeItems} hitStates={hitStates}
               keyMap={keyMap} dualStick={dualStick} onHit={handleHit} samplingPack={samplingPack}/>
           </main>
-          <ControlBar volume={volume} setVolume={setVolume} reverb={reverb} setReverb={setReverb} dualStick={dualStick} setDualStick={setDualStick}/>
+          <ControlBar volume={volume} setVolume={setVolume} reverb={reverb} setReverb={setReverb} dualStick={dualStick} setDualStick={setDualStick} velMode={velMode} setVelMode={setVelMode}/>
           <Sequencer seq={seq} activeItems={activeItems} onRecordSync={handleRecordSync} presetId={presetId} isRecording={recorder.isRecording}/>
         </div>
       </div>

@@ -361,6 +361,16 @@ export function playCowbell(v,pan,rev){
 }
 
 export function playSound(soundId,v,pan,rev,profile='acoustic'){
+  // Try sample engine first — falls back to synthesis if not loaded or unavailable
+  try {
+    const { playSample, hasSample } = window.__sampleEngine || {}
+    if (playSample && hasSample && hasSample(soundId)) {
+      if (playSample(soundId, v, pan, rev)) return
+      // playSample returns false → sample not cached yet → fall through to synthesis
+    }
+  } catch {}
+
+  // Synthesis fallback
   switch(soundId){
     case 'kick':     return playKick(v,pan,rev,profile)
     case 'snare':    return playSnare(v,pan,rev,profile)

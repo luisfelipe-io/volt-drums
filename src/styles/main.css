@@ -926,3 +926,96 @@ canvas.vu { border-radius:2px; background:var(--surface2); border:1px solid var(
 .fb-textarea:focus, .fb-input:focus { border-color: var(--accent); }
 .fb-textarea::placeholder, .fb-input::placeholder { color: var(--text-dim); }
 .fb-input { resize: none; }
+
+/* ─── Loading Screen ─────────────────────────────────────────────────────────── */
+.loading-screen {
+  position: fixed;
+  inset: 0;
+  background: var(--bg);
+  display: flex;
+  align-items: center;
+  justify-content: center;
+  z-index: 999;
+}
+.loading-inner {
+  display: flex;
+  flex-direction: column;
+  align-items: center;
+  gap: 16px;
+  width: 280px;
+}
+.loading-brand {
+  font-family: var(--font-brand);
+  font-size: 20px;
+  font-weight: 900;
+  letter-spacing: 6px;
+  color: var(--text-primary);
+}
+.loading-sub {
+  font-family: var(--font-mono);
+  font-size: 9px;
+  letter-spacing: 2px;
+  color: var(--text-dim);
+}
+.loading-bar-wrap {
+  width: 100%;
+  height: 3px;
+  background: var(--border);
+  border-radius: 2px;
+  overflow: hidden;
+}
+.loading-bar {
+  height: 100%;
+  background: var(--accent);
+  border-radius: 2px;
+  transition: width .2s ease-out;
+  box-shadow: 0 0 8px var(--accent);
+}
+.loading-count {
+  font-family: var(--font-mono);
+  font-size: 8px;
+  letter-spacing: 1px;
+  color: var(--text-dim);
+}
+
+/* ─── Velocity Mode Selector ─────────────────────────────────────────────────── */
+.ctrl-vel-section { gap: 6px; }
+.ctrl-vel-btns {
+  display: flex;
+  gap: 2px;
+}
+.ctrl-vel-btn {
+  font-family: var(--font-mono);
+  font-size: 7px;
+  letter-spacing: 1px;
+  padding: 3px 7px;
+  height: 20px;
+  background: var(--surface2);
+  border: 1px solid var(--border);
+  border-radius: 2px;
+  color: var(--text-dim);
+  cursor: pointer;
+  transition: all .12s;
+}
+.ctrl-vel-btn:hover { border-color: var(--border2); color: var(--text-secondary); }
+.ctrl-vel-btn.active {
+  background: var(--accent-dim);
+  border-color: var(--accent);
+  color: var(--accent);
+}
+
+/* ─── Velocity key hints ─────────────────────────────────────────────────────── */
+.ctrl-vel-btn {
+  flex-direction: column;
+  align-items: center;
+  height: 28px;
+  padding: 2px 8px;
+  gap: 1px;
+}
+.vel-key-hint {
+  font-size: 5px;
+  letter-spacing: 0.5px;
+  color: var(--text-dim);
+  line-height: 1;
+}
+.ctrl-vel-btn.active .vel-key-hint { color: var(--accent); opacity: 0.7; }

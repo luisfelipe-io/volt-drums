@@ -17,7 +17,7 @@ export default function KitSelectModal({ open, onClose, currentPresetId, onSelec
               )}
               <div className="kit-name">{p.name.toUpperCase()}</div>
               <div className="kit-desc">{p.description}</div>
-              <div className="kit-tags">{p.tags.map(t=><span key={t} className="kit-tag">{t}</span>)}</div>
+              <div className="kit-tags">{(p.tags||[]).map(t=><span key={t} className="kit-tag">{t}</span>)}</div>
               {p.id===currentPresetId&&<div style={{marginTop:8,fontFamily:'var(--font-mono)',fontSize:7,letterSpacing:3,color:'var(--accent)'}}>● ACTIVE</div>}
             </div>
           ))}
